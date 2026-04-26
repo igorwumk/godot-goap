@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GOAPAction" load_steps=3 format=3 uid="uid://c2ob337eps1ow"]
+
+[ext_resource type="Script" path="res://addons/goap/goapaction.gd" id="1_1p44d"]
+[ext_resource type="Script" path="res://goap/actions/eat_fruit.gd" id="1_3kqkl"]
+
+[resource]
+script = ExtResource("1_1p44d")
+name = "eat_fruit"
+preconditions = {
+"hungry": true
+}
+effects = {
+"hungry": false
+}
+base_cost = 1.0
+behavior_script = ExtResource("1_3kqkl")

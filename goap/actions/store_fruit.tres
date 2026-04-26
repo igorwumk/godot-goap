@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GOAPAction" load_steps=3 format=3 uid="uid://yibr2lx5t6e6"]
+
+[ext_resource type="Script" path="res://addons/goap/goapaction.gd" id="1_cq4cs"]
+[ext_resource type="Script" path="res://goap/actions/store_fruit.gd" id="1_mupfh"]
+
+[resource]
+script = ExtResource("1_cq4cs")
+name = "store_fruit"
+preconditions = {
+"holding_fruit": true
+}
+effects = {
+"holding_fruit": false,
+"store_fruit": true
+}
+base_cost = 2.0
+behavior_script = ExtResource("1_mupfh")

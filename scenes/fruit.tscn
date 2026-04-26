@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cjf750mq68t2v"]
+
+[ext_resource type="Script" path="res://scripts/fruit.gd" id="1_wihob"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p4jje"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_v4pc2"]
+material = SubResource("StandardMaterial3D_p4jje")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nqead"]
+radius = 0.25
+
+[node name="Fruit" type="CharacterBody3D" groups=["fruit"]]
+collision_layer = 2
+script = ExtResource("1_wihob")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_v4pc2")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_nqead")

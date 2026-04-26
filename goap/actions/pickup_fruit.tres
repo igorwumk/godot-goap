@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GOAPAction" load_steps=3 format=3 uid="uid://bair8tokrflma"]
+
+[ext_resource type="Script" path="res://goap/actions/pickup_fruit.gd" id="1_3t45b"]
+[ext_resource type="Script" path="res://addons/goap/goapaction.gd" id="1_l2swx"]
+
+[resource]
+script = ExtResource("1_l2swx")
+name = "pickup_fruit"
+preconditions = {
+"holding_fruit": false
+}
+effects = {
+"holding_fruit": true
+}
+base_cost = 1.0
+behavior_script = ExtResource("1_3t45b")

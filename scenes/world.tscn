@@ -1,0 +1,177 @@
+[gd_scene load_steps=24 format=3 uid="uid://d0do243qtj8bi"]
+
+[ext_resource type="Script" path="res://scripts/spawner.gd" id="1_2phb2"]
+[ext_resource type="Script" path="res://scripts/agent.gd" id="1_3fsdh"]
+[ext_resource type="PackedScene" uid="uid://cjf750mq68t2v" path="res://scenes/fruit.tscn" id="1_k84vi"]
+[ext_resource type="Script" path="res://scripts/basket.gd" id="1_x85vn"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="3_dg4x3"]
+[ext_resource type="Script" path="res://scripts/goap_agent.gd" id="5_80t7t"]
+[ext_resource type="Script" path="res://scripts/health_bar.gd" id="6_e715e"]
+[ext_resource type="Script" path="res://scripts/fruit_label.gd" id="7_3edpx"]
+[ext_resource type="Script" path="res://scripts/action_label.gd" id="7_ch6te"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rxq58"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_i54cg"]
+sky_material = SubResource("ProceduralSkyMaterial_rxq58")
+
+[sub_resource type="Environment" id="Environment_vjsod"]
+background_mode = 2
+sky = SubResource("Sky_i54cg")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_2xw23"]
+vertices = PackedVector3Array(-1, 0.5, -2.5, 0.5, 0.5, -3, 0.5, 0.5, -149.5, -149.5, 0.5, -149.5, -149.5, 0.5, -1.5, -1, 0.5, -1.5, 1.5, 0.5, -2, 149.5, 0.5, -2, 149.5, 0.5, -149.5, 0, 0.5, -0.5, 0, 0.5, 149.5, 149.5, 0.5, 149.5, -149.5, 0.5, 149.5)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4), PackedInt32Array(0, 5, 4), PackedInt32Array(1, 2, 6), PackedInt32Array(6, 2, 7), PackedInt32Array(7, 2, 8), PackedInt32Array(6, 7, 9), PackedInt32Array(9, 7, 10), PackedInt32Array(10, 7, 11), PackedInt32Array(5, 9, 4), PackedInt32Array(4, 9, 10), PackedInt32Array(4, 10, 12)]
+cell_size = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yskp4"]
+albedo_color = Color(0.352333, 1, 0.33, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3j43g"]
+albedo_color = Color(1, 0.55, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ggm1n"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mt00j"]
+material = SubResource("StandardMaterial3D_ggm1n")
+size = Vector2(100, 100)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nuiqr"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_c0yx5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7gl4n"]
+albedo_color = Color(0.0166664, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2h1q4"]
+material = SubResource("StandardMaterial3D_7gl4n")
+size = Vector3(0.8, 0.2, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jnqx2"]
+bg_color = Color(0.26, 0.26, 0.26, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iu6jp"]
+bg_color = Color(1, 0, 0, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vjsod")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_2xw23")
+
+[node name="Floor" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(300, 1, 300)
+material = SubResource("StandardMaterial3D_yskp4")
+
+[node name="Basket" type="CSGBox3D" parent="NavigationRegion3D/Floor" groups=["basket"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -2)
+material = SubResource("StandardMaterial3D_3j43g")
+script = ExtResource("1_x85vn")
+
+[node name="Spawner" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+mesh = SubResource("PlaneMesh_mt00j")
+script = ExtResource("1_2phb2")
+prefab = ExtResource("1_k84vi")
+
+[node name="Agent" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_3fsdh")
+
+[node name="GOAPAgent" type="Node" parent="Agent" node_paths=PackedStringArray("agent")]
+script = ExtResource("5_80t7t")
+agent = NodePath("..")
+
+[node name="Collision" type="CollisionShape3D" parent="Agent"]
+shape = SubResource("CapsuleShape3D_nuiqr")
+
+[node name="Body" type="MeshInstance3D" parent="Agent"]
+mesh = SubResource("CapsuleMesh_c0yx5")
+
+[node name="Eyes" type="MeshInstance3D" parent="Agent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.459, -0.348)
+mesh = SubResource("BoxMesh_2h1q4")
+
+[node name="HoldPosition" type="Node3D" parent="Agent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -0.5)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Agent"]
+
+[node name="Fruit" parent="." instance=ExtResource("1_k84vi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.41175, 6, -3.31925)
+
+[node name="Fruit5" parent="." instance=ExtResource("1_k84vi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 6.33436)
+
+[node name="Fruit2" parent="." instance=ExtResource("1_k84vi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -10.3343)
+
+[node name="Fruit3" parent="." instance=ExtResource("1_k84vi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.13537, 6, -10.3343)
+
+[node name="Fruit4" parent="." instance=ExtResource("1_k84vi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.13537, 6, -8.16603)
+
+[node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.568303, 0.822819, 0, -0.822819, 0.568303, 0, 8.70629, 5.52849)
+script = ExtResource("3_dg4x3")
+target = NodePath("../Agent")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Control"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 1
+offset_right = 200.0
+offset_bottom = 27.0
+theme_override_styles/background = SubResource("StyleBoxFlat_jnqx2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_iu6jp")
+script = ExtResource("6_e715e")
+
+[node name="FruitLabel" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+offset_top = 27.0
+offset_right = 200.0
+offset_bottom = 50.0
+script = ExtResource("7_3edpx")
+
+[node name="ActionLabel" type="Label" parent="CanvasLayer/Control"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 200.0
+grow_vertical = 0
+script = ExtResource("7_ch6te")
+
+[node name="FruitSpawnTimer" type="Timer" parent="."]
+wait_time = 2.5
+autostart = true
+
+[connection signal="count_changed" from="NavigationRegion3D/Floor/Basket" to="CanvasLayer/Control/FruitLabel" method="_on_basket_count_changed"]
+[connection signal="action_changed" from="Agent" to="CanvasLayer/Control/ActionLabel" method="_on_agent_action_changed"]
+[connection signal="health_changed" from="Agent" to="CanvasLayer/Control/HealthBar" method="_on_agent_health_changed"]
